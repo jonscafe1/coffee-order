@@ -1,147 +1,210 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.2">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order Coffee from Jon’s Cafe</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .card {
+      background: white;
+      max-width: 380px;
+      margin: auto;
+      padding: 32px 28px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+    .logo {
+      width: 180px;
+      height: auto;
+      display: block;
+      margin: 0 auto 8px;
+    }
+    h1 {
+      text-align: center;
+      margin: 0 0 28px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #2d1b14;
+    }
+    .emoji { font-size: 28px; margin-right: 8px; }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #4a5568;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      margin-top: 6px;
+      font-size: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      background: #fafbfc;
+      transition: all 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #ed8936;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(237,137,54,0.1);
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 20px;
+      border: none;
+      background: linear-gradient(135deg, #ed8936, #dd6b20);
+      color: white;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    button:hover {
+      transform: translateY(-1px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .success {
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+      background: #c6f6d5;
+      border-radius: 16px;
+      color: #22543d;
+      display: none;
+      font-weight: 500;
+    }
+    @media (max-width: 480px) {
+      .card { margin: 10px; padding: 24px 20px; }
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Order Coffee&lt;/title&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #f6f6f6;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.card {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 420px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: auto;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 8px 24px rgba(0,0,0,0.06);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>h1 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>label {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>input, select, textarea {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #ddd;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>button {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: black;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>button:active {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transform: scale(0.98);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.success {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: green;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;☕ Order Coffee from Jon’s Cafe&lt;/h1&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Name&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;input id="name" placeholder="Your name" /&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Drink&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;select id="drink"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt; Americano &lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Cappuccino&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Cortado&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Espresso&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Latte&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Size&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;select id="size"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;For here&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;To go&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Milk&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;select id="milk"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Cow’s&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Oat&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Notes (optional)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;textarea id="notes" rows="2" placeholder="Extra hot, light foam…"&gt;&lt;/textarea&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="submitOrder()"&gt;Place Order&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="success" id="success"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>✅ Order received!</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>function submitOrder() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>fetch("https://script.google.com/macros/s/AKfycbxgLj6qqH_lw87ar952uk4HPF6KOCmNxvVv-G_PASPpYNKEppIpql5kgr0BknTP5ZcAyQ/exec", {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>method: "POST",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body: JSON.stringify({</p>
-<p class="p1"><span class="Apple-converted-space">          </span>name: name.value,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>drink: drink.value,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>size: size.value,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>milk: milk.value,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>notes: notes.value</p>
-<p class="p1"><span class="Apple-converted-space">        </span>})</p>
-<p class="p1"><span class="Apple-converted-space">      </span>})</p>
-<p class="p1"><span class="Apple-converted-space">      </span>.then(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById("success").style.display = "block";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>})</p>
-<p class="p1"><span class="Apple-converted-space">      </span>.catch(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>alert("Something went wrong. Please try again.");</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+  <div class="card">
+    <!-- ADD YOUR LOGO HERE -->
+    <img src="jonscafepic1.jpeg" alt="Jon’s Cafe Logo" style="width: 180px; height: auto; margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto;">
+
+    <!-- <h1>Order</h1> -->
+    
+    <form action="https://script.google.com/macros/s/AKfycbwu5r5VmVDneELpgSQDFHYGzAeD2jrBeO03mwsBVPS1CCXTYFnmo6CkppjtnDCCMba1ZA/exec" method="POST">
+      <label>Name</label>
+      <input name="name" placeholder="Your name" required />
+      
+      <label>Drink</label>
+      <select name="drink" required>
+        <option>Americano</option>
+        <option>Cappuccino</option>
+        <option>Cortado</option>
+        <option>Espresso</option>
+        <option>Latte</option>
+      </select>
+      
+      <label>Cup</label>
+      <select name="cup" required>
+        <option>For here</option>
+        <option>To go</option>
+      </select>
+      
+      <label>Milk</label>
+      <select name="milk" required>
+        <option>Cow's</option>
+        <option>Oat</option>
+      </select>
+
+      <label>Syrup or foam</label>
+      <select name="syrup" required>
+        <option>Maple syrup</option>
+        <option>Pistachio foam</option>
+        <option>Vanilla syrup</option>
+      </select>
+      
+      <label>Customization</label>
+      <textarea name="notes" rows="1" placeholder="Iced, extra hot, light foam, ..."></textarea>
+      
+      <button type="submit">Place Order ☕</button>
+    </form>
+  </div>
+
+   <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.querySelector('input[name="name"]');
+    nameInput.addEventListener('input', function() {
+      const value = this.value.trim().toLowerCase();
+
+      if (value === 'nika') {
+        const popup = document.createElement('div');
+        popup.innerHTML = '❤️ Love you! ❤️';
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #ed8936; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+      else if (value === 'henry') {  // ← Fixed: "else if"
+        const popup = document.createElement('div');
+        popup.innerHTML = '🐻 Go Bears! 🐻';
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #ed8936; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+      else if (value === 'rana') {
+        const popup = document.createElement('div');
+        popup.innerHTML = '☹️ We don\'t ship to your state ☹️';
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+      else if (value === 'laurice') {
+        const popup = document.createElement('div');
+        popup.innerHTML = '☹️ We don\'t ship to your state ☹️';  // ← Fixed quote
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+      else if (value === 'laurs') {
+        const popup = document.createElement('div');
+        popup.innerHTML = '☹️ We don\'t ship to your state ☹️';
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+    });  // ← Fixed extra brace
+  });
+</script>
+
+
+  
 </body>
 </html>
