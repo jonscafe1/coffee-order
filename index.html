@@ -100,7 +100,7 @@
 
     <!-- <h1>Order</h1> -->
     
-    <form action="https://script.google.com/macros/s/AKfycbwW2jjmuCkKrYD3XhI8fAE9zulHOwIUZCZ7WrzrAzJ2dn0G5n-VopUdeg7WzUZkQFHI/exec" method="POST">
+    <form action="https://script.google.com/macros/s/AKfycby0FUwh-mX9ssGYpnfMCvGc-6kgy8_SGWfF3OCwmIba-Uy_uU6kVGEi9B0ZWQmb8oqq/exec" method="POST">
       <label>Name</label>
       <input name="name" placeholder="Your name" required />
       
@@ -114,8 +114,8 @@
         <option>Other</option>
       </select>
       
-      <label>Cup</label>
-      <select name="cup" required>
+      <label>Iced or hot</label>
+      <select name="temp" required>
         <option>For here</option>
         <option>To go</option>
       </select>
@@ -129,14 +129,20 @@
 
       <label>Syrup or foam</label>
       <select name="syrup" required>
+        <option>(None)</option>
         <option>Maple syrup</option>
         <option>Pistachio foam</option>
         <option>Vanilla syrup</option>
-        <option>(None)</option>
+      </select>
+
+      <label>Cup</label>
+      <select name="cup" required>
+        <option>For here</option>
+        <option>To go</option>
       </select>
       
       <label>Customization</label>
-      <textarea name="notes" rows="1" placeholder="Iced, extra hot, light foam, ..."></textarea>
+      <textarea name="notes" rows="1" placeholder="Extra hot, light foam, ..."></textarea>
       
       <button type="submit">Place Order ☕</button>
     </form>
@@ -195,6 +201,50 @@
       else if (value === 'laurs') {
         const popup = document.createElement('div');
         popup.innerHTML = '☹️ We don\'t ship to your state ☹️';
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+      else if (value === 'Neeks') {
+        const popup = document.createElement('div');
+        popup.innerHTML = 'Love you 👻👻🐻';
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+      else if (value === 'Lovebug') {
+        const popup = document.createElement('div');
+        popup.innerHTML = '🥵🥵🥵🥵🥵🥵🥵';
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+      else if (value === 'blub') {
+        const popup = document.createElement('div');
+        popup.innerHTML = '🫃🫃🫃🫃🫃🫃🫃';
+        popup.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
+          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      }
+      else if (value === 'smooch') {
+        const popup = document.createElement('div');
+        popup.innerHTML = '😚😚😚😚😚😚';
         popup.style.cssText = `
           position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
           background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
