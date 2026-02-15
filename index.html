@@ -5,107 +5,271 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Order Coffee from Jon’s Cafe</title>
   <link rel="apple-touch-icon" href="jcgreen.jpeg">
-  
+
   <style>
     * { box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin:0; padding:20px; min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      overflow-x: hidden;
+    }
+    .card{
+      background:#fff; width:100%; max-width:420px;
+      padding:28px 24px; border-radius:24px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.08);
+    }
+    .logo{ width:180px; display:block; margin:0 auto 10px; height:auto; }
+    h1{ text-align:center; margin:0 0 18px; font-size:22px; font-weight:800; color:#2d1b14; }
+    label{ display:block; margin-top:16px; font-weight:700; font-size:13px; color:#4a5568; }
+    input,select,textarea{
+      width:100%; padding:14px 16px; margin-top:6px;
+      font-size:16px; border:2px solid #e2e8f0; border-radius:16px;
+      background:#fafbfc; transition:all .2s;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:none; border-color:#ed8936; background:#fff;
+      box-shadow:0 0 0 3px rgba(237,137,54,.1);
+    }
+    .btn{
+      width:100%; margin-top:18px; padding:16px;
+      font-size:16px; font-weight:800; border-radius:20px;
+      border:none; background: linear-gradient(135deg, #ed8936, #dd6b20);
+      color:#fff; cursor:pointer;
+      transition: transform .08s;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .status{
+      margin-top:16px; padding:14px; border-radius:16px; display:none;
+      font-weight:650;
+    }
+    .status.ok{ background:#c6f6d5; color:#22543d; }
+    .status.err{ background:#fed7d7; color:#742a2a; }
+    .hidden{ display:none !important; }
+
+    /* ====== DRAMATIC RANA MODE STYLES ====== */
+    @keyframes ranaShake {
+      0% { transform: translate(0,0) rotate(0); }
+      10% { transform: translate(-6px, 3px) rotate(-0.7deg); }
+      20% { transform: translate(7px, -5px) rotate(0.8deg); }
+      30% { transform: translate(-8px, -2px) rotate(-0.6deg); }
+      40% { transform: translate(6px, 6px) rotate(0.7deg); }
+      50% { transform: translate(-5px, 2px) rotate(-0.4deg); }
+      60% { transform: translate(8px, -3px) rotate(0.5deg); }
+      70% { transform: translate(-7px, 5px) rotate(-0.8deg); }
+      80% { transform: translate(6px, -6px) rotate(0.6deg); }
+      90% { transform: translate(-5px, -2px) rotate(-0.3deg); }
+      100% { transform: translate(0,0) rotate(0); }
+    }
+
+    @keyframes neonFlicker {
+      0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px rgba(255,255,255,.8)); }
+      30% { opacity: .85; filter: drop-shadow(0 0 18px rgba(255,105,180,.9)); }
+      55% { opacity: .65; filter: drop-shadow(0 0 28px rgba(0,255,255,.9)); }
+      75% { opacity: .95; filter: drop-shadow(0 0 22px rgba(255,255,0,.85)); }
+    }
+
+    @keyframes bgPulse {
+      0% { transform: scale(1); opacity: .85; }
+      50% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); opacity: .85; }
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @keyframes spotlightSweep {
+      0% { transform: translateX(-60%) rotate(18deg); opacity: 0; }
+      15% { opacity: .5; }
+      50% { opacity: .8; }
+      85% { opacity: .5; }
+      100% { transform: translateX(160%) rotate(18deg); opacity: 0; }
+    }
+
+    @keyframes popIn {
+      0% { transform: translateY(20px) scale(.92); opacity: 0; }
+      70% { transform: translateY(-4px) scale(1.02); opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes glowBorder {
+      0% { box-shadow: 0 0 0 rgba(255,105,180,0), 0 0 0 rgba(0,255,255,0); }
+      50% { box-shadow: 0 0 40px rgba(255,105,180,.55), 0 0 80px rgba(0,255,255,.35); }
+      100% { box-shadow: 0 0 0 rgba(255,105,180,0), 0 0 0 rgba(0,255,255,0); }
+    }
+
+    /* Fullscreen overlay created by JS */
+    .ranaOverlay{
+      position: fixed; inset: 0;
+      z-index: 999999;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      animation: ranaShake .75s linear infinite;
+    }
+    .ranaBg{
+      position: absolute; inset: -30%;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(0,255,255,.35), transparent 40%),
+        radial-gradient(circle at 80% 25%, rgba(255,105,180,.45), transparent 45%),
+        radial-gradient(circle at 50% 75%, rgba(255,255,0,.25), transparent 50%),
+        linear-gradient(135deg, #070018 0%, #0b1b5e 45%, #2a0054 100%);
+      filter: saturate(160%) contrast(120%);
+      animation: bgPulse 1.2s ease-in-out infinite;
+    }
+    .ranaMarquee{
+      position: absolute;
+      top: 12px; left: 0; right: 0;
+      white-space: nowrap;
+      font-weight: 1000;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-size: 16px;
+      color: rgba(255,255,255,.92);
+      text-shadow: 0 0 12px rgba(0,255,255,.5), 0 0 24px rgba(255,105,180,.35);
+      pointer-events: none;
+    }
+    .ranaMarquee span{
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 7s linear infinite;
+    }
+
+    .spotlight{
+      position: absolute;
+      top: -30%;
+      left: -60%;
+      width: 40%;
+      height: 220%;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255,255,255,.18) 45%,
+        rgba(255,255,255,.30) 50%,
+        rgba(255,255,255,.18) 55%,
+        transparent 100%
+      );
+      filter: blur(1px);
+      animation: spotlightSweep 1.3s ease-in-out infinite;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .ranaPanel{
+      position: relative;
+      width: min(520px, 92vw);
+      border-radius: 26px;
+      padding: 22px 18px 18px;
+      background: rgba(10, 6, 28, .55);
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(10px);
+      animation: popIn .42s ease-out both, glowBorder 1.4s ease-in-out infinite;
+    }
+    .ranaTitle{
       margin: 0;
-      padding: 20px;
-      min-height: 100vh;
-    }
-    .card {
-      background: white;
-      max-width: 380px;
-      margin: auto;
-      padding: 32px 28px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
-    .logo {
-      width: 180px;
-      height: auto;
-      display: block;
-      margin: 0 auto 8px;
-    }
-    h1 {
       text-align: center;
-      margin: 0 0 28px;
-      font-size: 24px;
-      font-weight: 700;
-      color: #2d1b14;
+      font-size: 34px;
+      font-weight: 1000;
+      color: #fff;
+      line-height: 1.05;
+      letter-spacing: .5px;
+      text-shadow:
+        0 0 14px rgba(0,255,255,.45),
+        0 0 28px rgba(255,105,180,.35),
+        0 0 55px rgba(255,255,0,.12);
+      animation: neonFlicker 1.1s linear infinite;
     }
-    .emoji { font-size: 28px; margin-right: 8px; }
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: 600;
-      font-size: 14px;
-      color: #4a5568;
+    .ranaSub{
+      margin: 10px 0 14px;
+      text-align: center;
+      color: rgba(255,255,255,.92);
+      font-weight: 800;
+      letter-spacing: .2px;
     }
-    input, select, textarea {
+    .ranaGrid{
+      display: grid;
+      gap: 10px;
+    }
+    .ranaBadgeRow{
+      display:flex;
+      justify-content:center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+    .badge{
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      color: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.18);
+      text-shadow: 0 0 10px rgba(0,255,255,.25);
+      user-select: none;
+    }
+
+    .ranaVideoWrap{
       width: 100%;
-      padding: 14px 16px;
-      margin-top: 6px;
-      font-size: 16px;
-      border: 2px solid #e2e8f0;
+      aspect-ratio: 16 / 9;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      background: rgba(0,0,0,.25);
+    }
+    .ranaVideoWrap iframe{
+      width:100%;
+      height:100%;
+      border:0;
+    }
+
+    .ranaButtons{
+      display:flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .ranaBtn{
+      flex:1;
+      padding: 12px 14px;
       border-radius: 16px;
-      background: #fafbfc;
-      transition: all 0.2s;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #ed8936;
-      background: white;
-      box-shadow: 0 0 0 3px rgba(237,137,54,0.1);
-    }
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 20px;
+      font-weight: 1000;
       border: none;
-      background: linear-gradient(135deg, #ed8936, #dd6b20);
-      color: white;
       cursor: pointer;
-      transition: transform 0.1s;
+      color: #0b0618;
+      background: linear-gradient(135deg, #00f5ff, #ff4fd8);
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+      transition: transform .08s, filter .12s;
     }
-    button:hover {
-      transform: translateY(-1px);
+    .ranaBtn:active{ transform: translateY(1px) scale(.99); }
+    .ranaBtn.secondary{
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.95);
+      border: 1px solid rgba(255,255,255,.20);
+      box-shadow: none;
     }
-    button:active {
-      transform: translateY(0);
-    }
-    .success {
-      text-align: center;
-      margin-top: 20px;
-      padding: 20px;
-      background: #c6f6d5;
-      border-radius: 16px;
-      color: #22543d;
-      display: none;
-      font-weight: 500;
-    }
-    @media (max-width: 480px) {
-      .card { margin: 10px; padding: 24px 20px; }
+
+    /* Confetti canvas */
+    .confettiCanvas{
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
   <div class="card">
-    <!-- ADD YOUR LOGO HERE -->
-    <img src="jonscafepic.jpeg" alt="Jon’s Cafe Logo" style="width: 180px; height: auto; margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto;">
+    <img src="jonscafepic.jpeg" class="logo" alt="Jon’s Cafe Logo">
+    <h1>Order Coffee ☕</h1>
 
-    <!-- <h1>Order</h1> -->
-    
-    <form action="https://script.google.com/macros/s/AKfycbyecaJ8obv67tR5SToT4MN6n_eBSXXvFcBIbx9-XAfmJE5JnvlGC8OMmPazwMvhVy9s5Q/exec" method="POST">
+    <form id="orderForm" method="POST">
       <label>Name</label>
       <input name="name" placeholder="Your name" required />
-      
+
       <label>Drink</label>
       <select name="drink" required>
         <option>Americano</option>
@@ -115,13 +279,13 @@
         <option>Latte</option>
         <option>Other</option>
       </select>
-      
+
       <label>Hot or iced</label>
       <select name="temp" required>
         <option>Hot</option>
         <option>Iced</option>
       </select>
-      
+
       <label>Milk</label>
       <select name="milk" required>
         <option>Cow's</option>
@@ -142,124 +306,311 @@
         <option>For here</option>
         <option>To go</option>
       </select>
-      
+
       <label>Customization</label>
-      <textarea name="notes" rows="1" placeholder="Extra hot, light foam, ..."></textarea>
-      
-      <button type="submit">Place Order ☕</button>
+      <textarea name="notes" rows="2" placeholder="Extra hot, light foam, ..."></textarea>
+
+      <button class="btn" type="submit">Place Order ☕</button>
+
+      <div id="statusBox" class="status"></div>
     </form>
   </div>
 
-   <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const nameInput = document.querySelector('input[name="name"]');
-    nameInput.addEventListener('input', function() {
-      const value = this.value.trim().toLowerCase();
+<script>
+  
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzVZIg5xUlUJdBO_NDp2CcBupgcrtFM04C-US_PFTsUevt_RloWYlws1Z2-Et1hkQX7rg/exec";
+  
+  document.getElementById("orderForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-      if (value === 'nika') {
-        const popup = document.createElement('div');
-        popup.innerHTML = '❤️ Love you! ❤️';
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #ed8936; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
+  const form = e.target;
+  const statusBox = document.getElementById("statusBox");
+  const btn = form.querySelector('button[type="submit"]');
+
+  // UI: loading state
+  btn.disabled = true;
+  const oldBtnText = btn.textContent;
+  btn.textContent = "Placing order…";
+  statusBox.style.display = "none";
+
+  try {
+    const formData = new FormData(form);
+
+    const res = await fetch(WEB_APP_URL, {
+      method: "POST",
+      body: formData
+    });
+
+    // Works if your Apps Script returns JSON (recommended)
+    const data = await res.json();
+
+    if (!data.ok) throw new Error(data.error || "Order failed");
+
+    statusBox.className = "status ok";
+    statusBox.textContent = `✅ Order received! You are #${data.orderNumber}`;
+    statusBox.style.display = "block";
+
+    // optional: clear notes but keep name
+    form.notes.value = "";
+
+  } catch (err) {
+    statusBox.className = "status err";
+    statusBox.textContent = `❌ ${err.message}`;
+    statusBox.style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = oldBtnText;
+  }
+});
+
+
+  /* =========================
+     EASTER EGGS (Nika + EXTREMELY DRAMATIC Rana)
+  ========================= */
+  (function () {
+    const nameInput = document.querySelector('input[name="name"]');
+    if (!nameInput) return;
+
+    let lastTriggered = "";
+    let ranaOverlayEl = null;
+    let confettiStop = null;
+
+    function showNikaPopup() {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.35);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 9999;
+        padding: 20px;
+      `;
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        background: white;
+        width: 100%;
+        max-width: 340px;
+        padding: 24px 22px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      `;
+      modal.innerHTML = `
+        <div style="font-size:22px;font-weight:900;color:#2d1b14;margin-bottom:10px;">
+          ❤️ Love you!! ❤️
+        </div>
+        <button id="closeNikaModal" style="
+          width: 100%;
+          margin-top: 6px;
+          padding: 12px 14px;
+          font-size: 15px;
+          font-weight: 900;
+          border-radius: 14px;
+          border: none;
+          background: linear-gradient(135deg, #ed8936, #dd6b20);
+          color: white;
+          cursor: pointer;
+        ">OK</button>
+      `;
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+
+      const close = () => overlay.remove();
+      overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
+      document.getElementById("closeNikaModal").addEventListener("click", close);
+      setTimeout(() => { if (document.body.contains(overlay)) close(); }, 2000);
+    }
+
+    function startConfetti(canvas) {
+      const ctx = canvas.getContext("2d");
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      const colors = ["#00f5ff", "#ff4fd8", "#ffe600", "#ffffff", "#7cff6b", "#8c7bff"];
+      const pieces = Array.from({ length: 220 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * -h,
+        vx: (Math.random() - 0.5) * 3.4,
+        vy: 2 + Math.random() * 5.5,
+        r: 4 + Math.random() * 7,
+        rot: Math.random() * Math.PI,
+        vr: (Math.random() - 0.5) * 0.22,
+        color: colors[(Math.random() * colors.length) | 0],
+        shape: Math.random() < 0.35 ? "rect" : "circle"
+      }));
+
+      let running = true;
+
+      function onResize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
       }
-      else if (value === 'henry') {  // ← Fixed: "else if"
-        const popup = document.createElement('div');
-        popup.innerHTML = '🐻 Go Bears! 🐻';
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #ed8936; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
+      window.addEventListener("resize", onResize);
+
+      function tick() {
+        if (!running) return;
+
+        ctx.clearRect(0, 0, w, h);
+        for (const p of pieces) {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+
+          if (p.y > h + 50) {
+            p.y = -50;
+            p.x = Math.random() * w;
+          }
+          if (p.x < -50) p.x = w + 50;
+          if (p.x > w + 50) p.x = -50;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+
+          if (p.shape === "rect") {
+            ctx.fillRect(-p.r, -p.r * 0.6, p.r * 2.1, p.r * 1.2);
+          } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.r * 0.75, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+        requestAnimationFrame(tick);
       }
-      else if (value === 'rana') {
-        const popup = document.createElement('div');
-        popup.innerHTML = '☹️ We don\'t ship to your state ☹️';
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
+      requestAnimationFrame(tick);
+
+      return () => {
+        running = false;
+        window.removeEventListener("resize", onResize);
+      };
+    }
+
+    function closeRanaOverlay() {
+      if (confettiStop) { try { confettiStop(); } catch (_) {} confettiStop = null; }
+      if (ranaOverlayEl && document.body.contains(ranaOverlayEl)) {
+        ranaOverlayEl.remove();
       }
-      else if (value === 'laurice') {
-        const popup = document.createElement('div');
-        popup.innerHTML = '☹️ We don\'t ship to your state ☹️';  // ← Fixed quote
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      ranaOverlayEl = null;
+    }
+
+    function showRanaDramaticOverlay() {
+      // Close any existing
+      closeRanaOverlay();
+
+      const overlay = document.createElement("div");
+      overlay.className = "ranaOverlay";
+
+      // Background + spotlight + marquee + confetti
+      const bg = document.createElement("div");
+      bg.className = "ranaBg";
+
+      const marquee = document.createElement("div");
+      marquee.className = "ranaMarquee";
+      marquee.innerHTML = `<span>🗽 WELCOME TO NEW YORK • IT’S BEEN WAITING FOR YOU • 🗽 WELCOME TO NEW YORK • IT’S BEEN WAITING FOR YOU • </span>`;
+
+      const spotlight = document.createElement("div");
+      spotlight.className = "spotlight";
+
+      const canvas = document.createElement("canvas");
+      canvas.className = "confettiCanvas";
+
+      const panel = document.createElement("div");
+      panel.className = "ranaPanel";
+      panel.innerHTML = `
+        <h2 class="ranaTitle">WELCOME TO NEW YORK</h2>
+        <div class="ranaSub">🚨 RANA MODE ACTIVATED 🚨</div>
+
+        <div class="ranaBadgeRow">
+          <div class="badge">NEON</div>
+          <div class="badge">CONFETTI</div>
+          <div class="badge">EARTHQUAKE SHAKE</div>
+          <div class="badge">SPOTLIGHTS</div>
+        </div>
+
+        <div class="ranaGrid">
+          <div class="ranaVideoWrap">
+            <!-- YouTube embed w/ autoplay. Browsers allow since user typed (interaction). -->
+            <iframe
+              src="https://www.youtube.com/embed/FsGdznlfE2U?autoplay=1&playsinline=1"
+              title="Welcome to New York"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+
+          <div class="ranaButtons">
+            <button class="ranaBtn" id="ranaEncoreBtn" type="button">ENCORE 🔁</button>
+            <button class="ranaBtn secondary" id="ranaCloseBtn" type="button">OK OK I’M DONE 😅</button>
+          </div>
+        </div>
+      `;
+
+      overlay.appendChild(bg);
+      overlay.appendChild(marquee);
+      overlay.appendChild(spotlight);
+      overlay.appendChild(canvas);
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+
+      ranaOverlayEl = overlay;
+      confettiStop = startConfetti(canvas);
+
+      // Close on outside click
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeRanaOverlay();
+      });
+
+      // Buttons
+      overlay.querySelector("#ranaCloseBtn").addEventListener("click", closeRanaOverlay);
+      overlay.querySelector("#ranaEncoreBtn").addEventListener("click", () => {
+        // Replace the iframe to restart autoplay
+        const wrap = overlay.querySelector(".ranaVideoWrap");
+        wrap.innerHTML = `
+          <iframe
+            src="https://www.youtube.com/embed/FsGdznlfE2U?autoplay=1&playsinline=1"
+            title="Welcome to New York"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen
+          ></iframe>
         `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
+        // Add a quick “extra shake” burst
+        overlay.style.animationDuration = ".55s";
+        setTimeout(() => overlay && (overlay.style.animationDuration = ".75s"), 700);
+      });
+
+      // Auto-close after 12s (still dramatic, but not forever)
+      setTimeout(() => {
+        if (ranaOverlayEl) closeRanaOverlay();
+      }, 12000);
+    }
+
+    nameInput.addEventListener("input", () => {
+      const value = nameInput.value.trim().toLowerCase();
+
+      // Prevent re-trigger spam while value stays same
+      if (value === lastTriggered) return;
+
+      if (value === "nika") {
+        lastTriggered = value;
+        showNikaPopup();
+        return;
       }
-      else if (value === 'laurs') {
-        const popup = document.createElement('div');
-        popup.innerHTML = '☹️ We don\'t ship to your state ☹️';
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
+
+      if (value === "rana") {
+        lastTriggered = value;
+        showRanaDramaticOverlay();
+        return;
       }
-      else if (value === 'neeks') {
-        const popup = document.createElement('div');
-        popup.innerHTML = 'Love you 👻👻🐻';
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
+
+      // Reset trigger when leaving these names
+      if (value !== "nika" && value !== "rana") {
+        lastTriggered = "";
       }
-      else if (value === 'lovebug') {
-        const popup = document.createElement('div');
-        popup.innerHTML = '🥵🥵🥵🥵🥵🥵🥵';
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
-      }
-      else if (value === 'blub') {
-        const popup = document.createElement('div');
-        popup.innerHTML = '🫃🫃🫃🫃🫃🫃🫃';
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
-      }
-      else if (value === 'smooch') {
-        const popup = document.createElement('div');
-        popup.innerHTML = '😚😚😚😚😚😚';
-        popup.style.cssText = `
-          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-          background: #48bb78; color: white; padding: 24px 32px; border-radius: 20px;
-          font-size: 20px; font-weight: bold; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
-      }
-    });  // ← Fixed extra brace
-  });
+    });
+  })();
 </script>
 
-
-  
 </body>
 </html>
+
