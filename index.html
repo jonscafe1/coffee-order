@@ -579,11 +579,6 @@
         setTimeout(() => overlay && (overlay.style.animationDuration = ".75s"), 700);
       });
 
-      // Auto-close after 12s (still dramatic, but not forever)
-      setTimeout(() => {
-        if (ranaOverlayEl) closeRanaOverlay();
-      }, 12000);
-    }
 
     nameInput.addEventListener("input", () => {
       const value = nameInput.value.trim().toLowerCase();
