@@ -320,57 +320,53 @@
   
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzVZIg5xUlUJdBO_NDp2CcBupgcrtFM04C-US_PFTsUevt_RloWYlws1Z2-Et1hkQX7rg/exec";
   
-  /* =========================
-     2) FORM SUBMIT (REAL POST TO APPS SCRIPT VIA fetch)
-     - Expects Apps Script to return JSON: { ok: true, orderNumber: 123, ... }
-     ========================= */
   document.getElementById("orderForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const form = e.target;
-    const statusBox = document.getElementById("statusBox");
-    const btn = form.querySelector('button[type="submit"]');
+  const form = e.target;
+  const statusBox = document.getElementById("statusBox");
+  const btn = form.querySelector('button[type="submit"]');
 
-    // UI loading state
-    const oldBtnText = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = "Placing order…";
-    statusBox.style.display = "none";
+  // UI: loading state
+  btn.disabled = true;
+  const oldBtnText = btn.textContent;
+  btn.textContent = "Placing order…";
+  statusBox.style.display = "none";
 
-    try {
-      const formData = new FormData(form);
+  try {
+    const formData = new FormData(form);
 
-      const res = await fetch(WEB_APP_URL, {
-        method: "POST",
-        body: formData
-      });
+    const res = await fetch(WEB_APP_URL, {
+      method: "POST",
+      body: formData
+    });
 
-      const data = await res.json(); // requires JSON response from Apps Script
+    // Works if your Apps Script returns JSON (recommended)
+    const data = await res.json();
 
-      if (!data.ok) throw new Error(data.error || "Order failed");
+    if (!data.ok) throw new Error(data.error || "Order failed");
 
-      statusBox.className = "status ok";
-      statusBox.textContent = `✅ Order received! You are #${data.orderNumber}`;
-      statusBox.style.display = "block";
+    statusBox.className = "status ok";
+    statusBox.textContent = `✅ Order received! You are #${data.orderNumber}`;
+    statusBox.style.display = "block";
 
-      // Keep name, clear notes (optional)
-      if (form.notes) form.notes.value = "";
+    // optional: clear notes but keep name
+    form.notes.value = "";
 
-    } catch (err) {
-      statusBox.className = "status err";
-      statusBox.textContent = `❌ ${err.message}`;
-      statusBox.style.display = "block";
-    } finally {
-      btn.disabled = false;
-      btn.textContent = oldBtnText;
-    }
-  });
+  } catch (err) {
+    statusBox.className = "status err";
+    statusBox.textContent = `❌ ${err.message}`;
+    statusBox.style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = oldBtnText;
+  }
+});
+
 
   /* =========================
-     3) EASTER EGGS (Nika + EXTREMELY DRAMATIC Rana)
-     - Rana includes: confetti + neon + shaking + spotlight + marquee
-     - Adds: mobile-friendly audio start + dabbing pigeons overlay
-     ========================= */
+     EASTER EGGS (Nika + EXTREMELY DRAMATIC Rana)
+  ========================= */
   (function () {
     const nameInput = document.querySelector('input[name="name"]');
     if (!nameInput) return;
@@ -378,7 +374,6 @@
     let lastTriggered = "";
     let ranaOverlayEl = null;
     let confettiStop = null;
-    let pigeonStop = null;
 
     function showNikaPopup() {
       const overlay = document.createElement('div');
@@ -398,7 +393,6 @@
         border-radius: 20px;
         text-align: center;
         box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       `;
       modal.innerHTML = `
         <div style="font-size:22px;font-weight:900;color:#2d1b14;margin-bottom:10px;">
@@ -461,7 +455,10 @@
           p.y += p.vy;
           p.rot += p.vr;
 
-          if (p.y > h + 50) { p.y = -50; p.x = Math.random() * w; }
+          if (p.y > h + 50) {
+            p.y = -50;
+            p.x = Math.random() * w;
+          }
           if (p.x < -50) p.x = w + 50;
           if (p.x > w + 50) p.x = -50;
 
@@ -489,53 +486,8 @@
       };
     }
 
-    /* === Mobile-friendly YouTube helper === */
-    function ytEmbedUrl_(opts = {}) {
-      const { autoplay = 1, mute = 1, playsinline = 1 } = opts;
-      return `https://www.youtube.com/embed/FsGdznlfE2U?autoplay=${autoplay}&mute=${mute}&playsinline=${playsinline}`;
-    }
-
-    /* === Dabbing pigeons (emoji) overlay === */
-    function startPigeonParty_(overlay) {
-      const layer = document.createElement("div");
-      layer.className = "pigeonParty"; // requires CSS from earlier message
-      overlay.appendChild(layer);
-
-      const count = 10;
-      const rand = (min, max) => Math.random() * (max - min) + min;
-      const W = () => window.innerWidth;
-      const H = () => window.innerHeight;
-
-      for (let i = 0; i < count; i++) {
-        const p = document.createElement("div");
-        p.className = "pigeon"; // requires CSS from earlier message
-        p.textContent = Math.random() < 0.5 ? "🕊️✨" : "🕊️💪";
-
-        const x0 = rand(-0.2, 1.2) * W();
-        const y0 = rand(-0.2, 1.2) * H();
-        const x1 = rand(-0.2, 1.2) * W();
-        const y1 = rand(-0.2, 1.2) * H();
-
-        p.style.setProperty("--x0", `${x0}px`);
-        p.style.setProperty("--y0", `${y0}px`);
-        p.style.setProperty("--x1", `${x1}px`);
-        p.style.setProperty("--y1", `${y1}px`);
-        p.style.setProperty("--s", rand(0.65, 1.35).toFixed(2));
-        p.style.setProperty("--floatDur", `${rand(5.5, 10.5).toFixed(1)}s`);
-        p.style.setProperty("--dabDur", `${rand(0.45, 0.85).toFixed(2)}s`);
-
-        p.style.left = "0px";
-        p.style.top = "0px";
-
-        layer.appendChild(p);
-      }
-
-      return () => { try { layer.remove(); } catch (_) {} };
-    }
-
     function closeRanaOverlay() {
       if (confettiStop) { try { confettiStop(); } catch (_) {} confettiStop = null; }
-      if (pigeonStop) { try { pigeonStop(); } catch (_) {} pigeonStop = null; }
       if (ranaOverlayEl && document.body.contains(ranaOverlayEl)) {
         ranaOverlayEl.remove();
       }
@@ -543,17 +495,19 @@
     }
 
     function showRanaDramaticOverlay() {
+      // Close any existing
       closeRanaOverlay();
 
       const overlay = document.createElement("div");
       overlay.className = "ranaOverlay";
 
+      // Background + spotlight + marquee + confetti
       const bg = document.createElement("div");
       bg.className = "ranaBg";
 
       const marquee = document.createElement("div");
       marquee.className = "ranaMarquee";
-      marquee.innerHTML = `<span>🗽 WELCOME TO NEW YORK • IT’S BEEN WAITING FOR YOU • 🕊️ DAB PIGEONS • 🗽 WELCOME TO NEW YORK • IT’S BEEN WAITING FOR YOU • </span>`;
+      marquee.innerHTML = `<span>🗽 WELCOME TO NEW YORK • IT’S BEEN WAITING FOR YOU • 🗽 WELCOME TO NEW YORK • IT’S BEEN WAITING FOR YOU • </span>`;
 
       const spotlight = document.createElement("div");
       spotlight.className = "spotlight";
@@ -572,32 +526,17 @@
           <div class="badge">CONFETTI</div>
           <div class="badge">EARTHQUAKE SHAKE</div>
           <div class="badge">SPOTLIGHTS</div>
-          <div class="badge">DAB PIGEONS</div>
         </div>
 
         <div class="ranaGrid">
           <div class="ranaVideoWrap">
+            <!-- YouTube embed w/ autoplay. Browsers allow since user typed (interaction). -->
             <iframe
-              id="ranaYt"
-              src="${ytEmbedUrl_({ autoplay: 1, mute: 1, playsinline: 1 })}"
+              src="https://www.youtube.com/embed/FsGdznlfE2U?autoplay=1&playsinline=1"
               title="Welcome to New York"
               allow="autoplay; encrypted-media; picture-in-picture"
               allowfullscreen
             ></iframe>
-
-            <button id="ranaStartAudio" style="
-              position:absolute; inset:0;
-              display:flex; align-items:center; justify-content:center;
-              border:none; cursor:pointer;
-              background: rgba(0,0,0,0.25);
-              color:white;
-              font-weight:1000;
-              font-size:18px;
-              letter-spacing: .5px;
-              text-shadow: 0 0 14px rgba(0,0,0,0.35);
-            ">
-              🔊 TAP TO START AUDIO
-            </button>
           </div>
 
           <div class="ranaButtons">
@@ -614,68 +553,42 @@
       overlay.appendChild(panel);
       document.body.appendChild(overlay);
 
-      // Save ref + start chaos layers
       ranaOverlayEl = overlay;
       confettiStop = startConfetti(canvas);
-      pigeonStop = startPigeonParty_(overlay);
 
-      // Mobile: user gesture to enable sound (reload iframe with mute=0)
-      const startBtn = overlay.querySelector("#ranaStartAudio");
-      const ytFrame = overlay.querySelector("#ranaYt");
-      if (startBtn && ytFrame) {
-        startBtn.addEventListener("click", () => {
-          ytFrame.src = ytEmbedUrl_({ autoplay: 1, mute: 0, playsinline: 1 });
-          startBtn.remove();
-        });
-      }
+      // Close on outside click
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeRanaOverlay();
+      });
 
-      // Close only via button (prevents accidental closes)
+      // Buttons
       overlay.querySelector("#ranaCloseBtn").addEventListener("click", closeRanaOverlay);
-
-      // ENCORE: restart video (muted) + re-show tap-to-audio overlay
       overlay.querySelector("#ranaEncoreBtn").addEventListener("click", () => {
+        // Replace the iframe to restart autoplay
         const wrap = overlay.querySelector(".ranaVideoWrap");
         wrap.innerHTML = `
           <iframe
-            id="ranaYt"
-            src="${ytEmbedUrl_({ autoplay: 1, mute: 1, playsinline: 1 })}"
+            src="https://www.youtube.com/embed/FsGdznlfE2U?autoplay=1&playsinline=1"
             title="Welcome to New York"
             allow="autoplay; encrypted-media; picture-in-picture"
             allowfullscreen
           ></iframe>
-          <button id="ranaStartAudio" style="
-            position:absolute; inset:0;
-            display:flex; align-items:center; justify-content:center;
-            border:none; cursor:pointer;
-            background: rgba(0,0,0,0.25);
-            color:white;
-            font-weight:1000;
-            font-size:18px;
-            letter-spacing: .5px;
-            text-shadow: 0 0 14px rgba(0,0,0,0.35);
-          ">
-            🔊 TAP TO START AUDIO
-          </button>
         `;
-
-        const startBtn2 = overlay.querySelector("#ranaStartAudio");
-        const ytFrame2 = overlay.querySelector("#ranaYt");
-        if (startBtn2 && ytFrame2) {
-          startBtn2.addEventListener("click", () => {
-            ytFrame2.src = ytEmbedUrl_({ autoplay: 1, mute: 0, playsinline: 1 });
-            startBtn2.remove();
-          });
-        }
-
-        // extra shake burst
+        // Add a quick “extra shake” burst
         overlay.style.animationDuration = ".55s";
         setTimeout(() => overlay && (overlay.style.animationDuration = ".75s"), 700);
       });
+
+      // Auto-close after 12s (still dramatic, but not forever)
+      setTimeout(() => {
+        if (ranaOverlayEl) closeRanaOverlay();
+      }, 60000);
     }
 
     nameInput.addEventListener("input", () => {
       const value = nameInput.value.trim().toLowerCase();
 
+      // Prevent re-trigger spam while value stays same
       if (value === lastTriggered) return;
 
       if (value === "nika") {
@@ -690,12 +603,16 @@
         return;
       }
 
+      // Reset trigger when leaving these names
       if (value !== "nika" && value !== "rana") {
         lastTriggered = "";
       }
     });
   })();
 </script>
+
+</body>
+</html>
 
 
 
